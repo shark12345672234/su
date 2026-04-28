@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sử 10 Pro - Ôn Thi Học Kỳ II</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee; 
+            --primary-light: #4895ef; 
+            --bg: #f0f2f5;
+            --white: #ffffff; 
+            --text: #2b2d42; 
+            --success: #10b981; 
+            --danger: #f72585;
+            --gray: #8d99ae;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Quicksand', sans-serif; 
+            background-color: var(--bg);
+            color: var(--text); 
+            margin: 0; 
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+
+        /* Card chung */
+        .card {
+            background: var(--white); 
+            border-radius: 20px; 
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            background: linear-gradient(to right, #4361ee, #4cc9f0);
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            text-align: center; 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            margin: 10px 0;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Input */
+        .input-group { margin-bottom: 15px; }
+        label { font-weight: 700; font-size: 0.85rem; margin-bottom: 5px; display: block; color: var(--gray); }
+        input[type="text"] {
+            width: 100%; 
+            padding: 14px 18px; 
+            border: 2px solid #e2e8f0;
+            border-radius: 15px; 
+            font-size: 1rem; 
+            outline: none;
+            font-family: inherit;
+        }
+        input[type="text"]:focus { border-color: var(--primary); }
+
+        /* Button */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white; 
+            border: none; 
+            padding: 16px; 
+            border-radius: 15px;
+            cursor: pointer; 
+            width: 100%; 
+            font-weight: 700; 
+            font-size: 1rem;
+            transition: transform 0.2s;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        .btn:active { transform: scale(0.98); }
+
+        /* Progress Bar - Cố định trên cùng khi làm bài */
+        .progress-container {
+            position: sticky; 
+            top: 0; 
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px; 
+            margin: -20px -20px 20px -20px;
+            z-index: 1000; 
+            border-bottom: 1px solid #eee;
+            backdrop-filter: blur(5px);
+        }
+        .progress-bar { height: 8px; background: #edf2f7; border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: 0.3s; }
+
+        /* Câu hỏi */
+        .q-item { 
+            border: 1.5px solid #f1f5f9; 
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+        }
+        .section-tag {
+            display: inline-block; 
+            padding: 4px 10px; 
+            background: #f1f5f9;
+            border-radius: 8px; 
+            font-size: 0.7rem; 
+            font-weight: 800; 
+            color: var(--gray); 
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .q-text { font-size: 1.05rem; font-weight: 700; margin-bottom: 15px; display: block; }
+
+        /* Đáp án */
+        .opt {
+            display: flex; 
+            align-items: center; 
+            padding: 14px;
+            border: 2px solid #f1f5f9; 
+            margin-bottom: 10px; 
+            border-radius: 12px;
+            cursor: pointer; 
+            font-size: 0.95rem;
+        }
+        .opt.selected { 
+            background: #eef2ff; 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            font-weight: 700;
+        }
+
+        /* Result */
+        .score-circle {
+            width: 120px; height: 120px; 
+            border-radius: 50%; 
+            border: 8px solid var(--primary);
+            margin: 20px auto; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 2.5rem; 
+            font-weight: 900; 
+            color: var(--primary);
+        }
+        .review-card { border-left: 6px solid #cbd5e1; padding: 15px; margin-bottom: 15px; border-radius: 12px; }
+        .correct { border-left-color: var(--success); background: #f0fdf4; }
+        .wrong { border-left-color: var(--danger); background: #fef2f2; }
+
+        @media (max-width: 480px) {
+            .container { padding: 10px; }
+            .card { padding: 20px; }
+            h1 { font-size: 1.5rem; }
+            .q-text { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="screen-start" class="card">
+        <h1>SỬ 10 PRO</h1>
+        <p style="text-align: center; color: var(--gray); margin-bottom: 25px;">Học kỳ II: Bài 9, 10, 12 • 120 Câu Hỏi</p>
+        
+        <div class="input-group">
+            <label>HỌ VÀ TÊN</label>
+            <input type="text" id="stu-name" placeholder="Nhập tên của bạn...">
+        </div>
+        <div class="input-group">
+            <label>LỚP</label>
+            <input type="text" id="stu-class" placeholder="Ví dụ: 10A1">
+        </div>
+        
+        <button class="btn" onclick="initApp()">BẮT ĐẦU ÔN TẬP</button>
+    </div>
+
+    <div id="screen-quiz" class="hidden">
+        <div class="progress-container">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.8rem; font-weight: 700;">
+                <span>Tiến độ: <span id="progress-count">0</span>/120</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        </div>
+
+        <div class="card">
+            <div id="quiz-load"></div>
+            <button class="btn" onclick="finishApp()" style="background: var(--success);">NỘP BÀI KẾT THÚC</button>
+        </div>
+    </div>
+
+    <div id="screen-result" class="hidden">
+        <div class="card" style="text-align: center;">
+            <h2 style="margin: 0;">KẾT QUẢ</h2>
+            <div class="score-circle" id="final-score">0</div>
+            <p id="stats-text" style="font-weight: 700; color: var(--gray);"></p>
+            <button class="btn" onclick="location.reload()" style="background: #e2e8f0; color: var(--text); box-shadow: none;">LÀM LẠI BÀI KHÁC</button>
+        </div>
+        <div id="review-load"></div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu mẫu (Giống của bạn)
+    const RAW_BANK = {
+        b9: [
+            { q: "Cơ sở hình thành văn minh Chăm-pa là nền văn hóa nào?", a: ["Sa Huỳnh", "Đông Sơn", "Hòa Bình", "Óc Eo"], c: "Sa Huỳnh" },
+            { q: "Vương quốc Phù Nam được hình thành trên cơ sở nền văn hóa nào?", a: ["Óc Eo", "Sa Huỳnh", "Đông Sơn", "Quỳnh Văn"], c: "Óc Eo" },
+            { q: "Tôn giáo nào ảnh hưởng mạnh nhất đến văn minh Chăm-pa và Phù Nam?", a: ["Ấn Độ giáo và Phật giáo", "Thiên Chúa giáo", "Hồi giáo", "Đạo giáo"], c: "Ấn Độ giáo và Phật giáo" },
+            { q: "Thương cảng sầm uất nhất của Phù Nam có tên là gì?", a: ["Óc Eo", "Vân Đồn", "Hội An", "Thanh Hà"], c: "Óc Eo" },
+            { q: "Vật liệu chính xây dựng các tháp Chăm là gì?", a: ["Gạch nung", "Đá vôi", "Bê tông", "Gỗ quý"], c: "Gạch nung" }
+        ],
+        b10: [
+            { q: "Bộ máy nhà nước Đại Việt hoàn chỉnh nhất vào thời vua nào?", a: ["Lê Thánh Tông", "Lý Thái Tổ", "Trần Nhân Tông", "Gia Long"], c: "Lê Thánh Tông" },
+            { q: "Tác phẩm nào được coi là bản 'Tuyên ngôn độc lập' thứ hai của dân tộc?", a: ["Bình Ngô Đại cáo", "Nam quốc sơn hà", "Hịch tướng sĩ", "Chiếu dời đô"], c: "Bình Ngô Đại cáo" },
+            { q: "Triều đại nào đầu tiên ở nước ta lập Quốc Tử Giám?", a: ["Nhà Lý", "Nhà Trần", "Nhà Hồ", "Nhà Lê sơ"], c: "Nhà Lý" },
+            { q: "Bộ luật thành văn đầu tiên của nước ta có tên là gì?", a: ["Hình thư", "Quốc triều hình luật", "Luật Gia Long", "Luật Hồng Đức"], c: "Hình thư" },
+            { q: "Ai là người chế tạo thành công súng thần cơ và thuyền chiến hai tầng?", a: ["Hồ Nguyên Trừng", "Trần Hưng Đạo", "Nguyễn Trãi", "Cao Thắng"], c: "Hồ Nguyên Trừng" }
+        ],
+        b12: [
+            { q: "Tín ngưỡng phổ biến và lâu đời nhất của các dân tộc Việt Nam là?", a: ["Thờ cúng tổ tiên", "Thờ thần Zeus", "Đạo Hồi", "Đạo Tin Lành"], c: "Thờ cúng tổ tiên" },
+            { q: "Loại nhà ở phổ biến của các dân tộc thiểu số miền núi là gì?", a: ["Nhà sàn", "Nhà trệt gạch", "Nhà chung cư", "Nhà đá"], c: "Nhà sàn" },
+            { q: "Đặc điểm nổi bật trong quan hệ giữa các dân tộc ở Việt Nam là?", a: ["Đoàn kết, hòa hợp", "Tách biệt, cô lập", "Mâu thuẫn kéo dài", "Cạnh tranh gay gắt"], c: "Đoàn kết, hòa hợp" },
+            { q: "Ngôn ngữ chính thức của quốc gia Việt Nam hiện nay là gì?", a: ["Tiếng Việt", "Tiếng Tày", "Tiếng Mông", "Tiếng Anh"], c: "Tiếng Việt" },
+            { q: "Lễ hội nào sau đây là của người Khơ-me?", a: ["Oóc om bóc", "Ka-tê", "Lồng tồng", "Gầu tào"], c: "Oóc om bóc" }
+        ]
+    };
+
+    let quizList = [];
+    let userChoices = {};
+
+    function initApp() {
+        const name = document.getElementById('stu-name').value;
+        const cls = document.getElementById('stu-class').value;
+        if(!name || !cls) return alert("Vui lòng nhập đầy đủ Tên và Lớp!");
+
+        quizList = [];
+        const keys = ['b9', 'b10', 'b12'];
+        const labels = ["BÀI 9: VĂN MINH CỔ", "BÀI 10: VĂN MINH ĐẠI VIỆT", "BÀI 12: DÂN TỘC VIỆT NAM"];
+
+        keys.forEach((key, kIdx) => {
+            for(let i=0; i<40; i++) {
+                let randomItem = RAW_BANK[key][Math.floor(Math.random() * RAW_BANK[key].length)];
+                let item = JSON.parse(JSON.stringify(randomItem));
+                item.tag = labels[kIdx];
+                item.options = item.a.sort(() => Math.random() - 0.5);
+                quizList.push(item);
+            }
+        });
+
+        // Xáo trộn toàn bộ 120 câu
+        quizList.sort(() => Math.random() - 0.5);
+
+        document.getElementById('screen-start').classList.add('hidden');
+        document.getElementById('screen-quiz').classList.remove('hidden');
+        renderUI();
+        window.scrollTo(0,0);
+    }
+
+    function renderUI() {
+        const container = document.getElementById('quiz-load');
+        container.innerHTML = quizList.map((item, i) => `
+            <div class="q-item" id="q-block-${i}">
+                <div class="section-tag">${item.tag} • Câu ${i+1}</div>
+                <span class="q-text">${item.q}</span>
+                <div class="opt-list">
+                    ${item.options.map((opt, oi) => `
+                        <div class="opt" onclick="pick(${i}, ${oi}, '${opt.replace(/'/g, "\\'")}')" id="opt-${i}-${oi}">
+                            ${opt}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function pick(qi, oi, val) {
+        userChoices[qi] = val;
+        const parent = document.getElementById(`q-block-${
